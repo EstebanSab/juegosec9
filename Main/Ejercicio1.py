@@ -1,6 +1,0 @@
-Sociales=input("cuantos alumnos hay en Sociales? ")
-Naturales=input("cuantos alumnos hay en Naturales? ")
-Economia=input("cuantos alumnos hay en Economia? ")
-Total=int(Sociales)+int(Naturales)+int(Economia)
-print("En itinerario son ", Total, " Alumnos")
-Salida=input("presione cualquier tecla para salir")
