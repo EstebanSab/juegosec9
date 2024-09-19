@@ -18,31 +18,23 @@ pygame.init()
 #    while(true)
         
 
-#definición de colores
-
-def generar_color_random():
-    return (random.randint(0,255),random.randint(0,255),random.randint(0,255))
-    time.sleep(1000)
-
-def generar_color_random1():
-    return (random.randint(0,100),random.randint(0,200),random.randint(0,100))
-
+#definición de Estilos
 pygame.init()
 claro=(151, 201, 92)
 azul=(0,0,255)
 rojo=(60,45,122)
 color= claro
-cubo=generar_color_random()
-cubo1=generar_color_random1()
 ventana=pygame.display.set_mode((1024,720))
+font1 = pygame.font.SysFont("ArialBlack", 40)#font with size of 52 and font style specified
 
 
-
+#Carga de imagenes
 señal1=pygame.image.load("señales/1.png")
 icono=pygame.image.load("16.png")
 jugador=pygame.image.load("jugador1.png").convert_alpha()
 jugador1=pygame.image.load("jugador2.png").convert_alpha()
 fondo=pygame.image.load("fondo_ciudad1.png")
+
 
 pygame.display.flip()
 pygame.display.set_icon(icono)
@@ -54,12 +46,9 @@ dt= 0
 
 puntos=[0,0]
 
-font1 = pygame.font.SysFont("ArialBlack", 40)#font with size of 52 and font style specified
-
-
-
 
 pygame.display.set_caption("Leyes de transito")
+
 players = [pygame.Rect(0, 0, 14, 34),pygame.Rect(0, 0, 14, 34)]
 
 
@@ -78,7 +67,6 @@ for x in range(0,obstacle_num):
 
 
 while running:
-
     #Funcion que carga los obstaculos en posiciones random
     def  obstacle_rects_random():
         for x in range(0, obstacle_num):
@@ -111,9 +99,8 @@ while running:
     ventana.blit(fondo, (0,-100))
     
 
-    pos= pygame.mouse.get_pos()
-    players[0].center = player_pos+pygame.math.Vector2(8, 15)
-    players[1].center = player_pos1+pygame.math.Vector2(8, 15)
+    #pos= pygame.mouse.get_pos()
+    
     
     pygame.draw.rect(ventana, color, players[0], -1)
     pygame.draw.rect(ventana, color, players[1], -1)
@@ -133,8 +120,12 @@ while running:
         pygame.draw.rect(ventana, rojo, obstacle_rects[x])
     
     pygame.draw.rect(ventana, "red", obstacle_rect)
-
+    
     ventana.blit(señal1, obstacle_rect)
+    
+    #Coloco la imagen del jugador en su hitbox
+    players[0].center = player_pos+pygame.math.Vector2(8, 15)
+    players[1].center = player_pos1+pygame.math.Vector2(8, 15)
     ventana.blit(jugador1, player_pos1)
     ventana.blit(jugador, player_pos)
 
