@@ -36,18 +36,6 @@ cubo=generar_color_random()
 cubo1=generar_color_random1()
 ventana=pygame.display.set_mode((1024,720))
 
-#creación de las hitboxes
-#def __init__ (self,x ,y): 
-    #self.x = x
-    #self.y = y
-    #self.hitbox = (self.x, self.y, 64, 64)
-pygame.display.set_caption("Leyes de transito")
-rect_1 = pygame.Rect(0, 0, 14, 34)
-rect_2 = pygame.Rect(0, 0, 14, 34)
-obstacle_rect = pygame.Rect(random.randint(0, 900), random.randint(0, 700), 100, 100)
-obstacle_rect2 = pygame.Rect(random.randint(0, 900), random.randint(0, 700), 100, 100)
-obstacle_rect3 = pygame.Rect(random.randint(0, 900), random.randint(0, 700), 100, 100)
-obstacle_rect4 = pygame.Rect(random.randint(0, 900), random.randint(0, 700), 100, 100)
 
 
 señal1=pygame.image.load("señales/1.png")
@@ -55,6 +43,7 @@ icono=pygame.image.load("16.png")
 jugador=pygame.image.load("jugador1.png").convert_alpha()
 jugador1=pygame.image.load("jugador2.png").convert_alpha()
 fondo=pygame.image.load("fondo_ciudad1.png")
+
 pygame.display.flip()
 pygame.display.set_icon(icono)
 reloj=pygame.time.Clock()
@@ -63,138 +52,95 @@ player_pos = pygame.Vector2(110, 400)
 player_pos1 = pygame.Vector2(ventana.get_width() / 2, ventana.get_height() / 2)
 dt= 0
 
-puntos1=0
-puntos2=0
-font2 = pygame.font.SysFont("ArialBlack", 40)#font with size of 52 and font style specified
-text2= font2.render("Toque una señal: "+ str(puntos1), True,(0,0,255))#text color specified to blue
+puntos=[0,0]
 
-font3 = pygame.font.SysFont("ArialBlack", 40)#font with size of 52 and font style specified
-text3= font3.render("Toque una señal: "+ str(puntos2), True,(0,0,255))#text color specified to blue
+font1 = pygame.font.SysFont("ArialBlack", 40)#font with size of 52 and font style specified
+
+
+
+
+pygame.display.set_caption("Leyes de transito")
+players = [pygame.Rect(0, 0, 14, 34),pygame.Rect(0, 0, 14, 34)]
+
+
+#Cartel correcto
+obstacle_rect = pygame.Rect(random.randint(0, 900), random.randint(0, 700), 100, 100)
+
+#cantidad de carteles erroneos
+obstacle_num = 4
+obstacle_rects= []
+
+for x in range(0,obstacle_num):
+    obstacle_rects.append(pygame.Rect(random.randint(0, 900), random.randint(0, 700), 100, 100))
+
+
+
 
 
 while running:
+
+    #Funcion que carga los obstaculos en posiciones random
+    def  obstacle_rects_random():
+        for x in range(0, obstacle_num):
+             obstacle_rects[x] = pygame.Rect(random.randint(0, 900), random.randint(0, 700), 100, 100)
     
+    #Si un jugador toca el cartel correcto
+    for x in range(0,2):
+        if players[x].colliderect(obstacle_rect) :
+            puntos[x]= puntos[x] + 1
+            obstacle_rect = pygame.Rect(random.randint(0, 900), random.randint(0, 700), 100, 100)
+            obstacle_rects_random()
+
+
+    #Si un jugador toca un cartel incorrecto 
+    for x in range(0, obstacle_num):
+        for j in range(0,2):
+            if players[j].colliderect(obstacle_rects[x]):
+                puntos[j]= puntos[j] - 1
+                obstacle_rects[x] = pygame.Rect(random.randint(0, 900), random.randint(0, 700), 100, 100)
+
+        
+        
+       
     for event in pygame.event.get():
         if event.type==pygame.QUIT:
            running=False
+
+
     ventana.fill(claro)
     ventana.blit(fondo, (0,-100))
-    ventana.blit(text2,(20,50))
-    ventana.blit(text3,(500,50))
-
-    #colision
-
-    if rect_1.colliderect(obstacle_rect) :
-        color= rojo
-        puntos1= puntos1 + 1
-        #cubo=azul
-        obstacle_rect = pygame.Rect(random.randint(0, 900), random.randint(0, 700), 100, 100)
-        obstacle_rect2 = pygame.Rect(random.randint(0, 900), random.randint(0, 700), 100, 100)
-        obstacle_rect3 = pygame.Rect(random.randint(0, 900), random.randint(0, 700), 100, 100)
-        obstacle_rect4 = pygame.Rect(random.randint(0, 900), random.randint(0, 700), 100, 100)
-        text2= font2.render("Puntuacion(1): " + str(puntos1), True,(255,0,0))
-        #text3= font3.render("Puntuacion(2): " + str(puntos2), True,(255,0,0))
-
-    if rect_2.colliderect(obstacle_rect):
-        color= rojo
-        puntos2= puntos2 + 1
-        #cubo=azul
-        obstacle_rect = pygame.Rect(random.randint(0, 900), random.randint(0, 700), 100, 100)
-        obstacle_rect2 = pygame.Rect(random.randint(0, 900), random.randint(0, 700), 100, 100)
-        obstacle_rect3 = pygame.Rect(random.randint(0, 900), random.randint(0, 700), 100, 100)
-        obstacle_rect4 = pygame.Rect(random.randint(0, 900), random.randint(0, 700), 100, 100)
-        #text2= font2.render("Puntuacion(1): " + str(puntos1), True,(255,0,0))
-        text3= font3.render("Puntuacion(2): " + str(puntos2), True,(255,0,0))
-
-    else:
-        color=claro
-        
-    #incorrecto colision 2
-        
-    if rect_1.colliderect(obstacle_rect2):
-        color= rojo
-        puntos1= puntos1 - 1
-        #cubo=azul
-        obstacle_rect2 = pygame.Rect(random.randint(0, 900), random.randint(0, 700), 100, 100)
-        text2= font2.render("Puntuacion(1): " + str(puntos1), True,(255,0,0))
-        #text3= font3.render("Puntuacion(2): " + str(puntos2), True,(255,0,0))
-
-    else:
-        color=claro
-        #cubo=generar_color_random
-    if rect_2.colliderect(obstacle_rect2):
-        color= rojo
-        puntos2= puntos2 - 1
-        #cubo=azul
-        obstacle_rect2 = pygame.Rect(random.randint(0, 900), random.randint(0, 700), 100, 100)
-        #text2= font2.render("Puntuacion(1): " + str(puntos1), True,(255,0,0))
-        text3= font3.render("Puntuacion(2): " + str(puntos2), True,(255,0,0))
-
-    else:
-        color=claro
-        #cubo=generar_color_random
-        
-    #incorrecto colision 3
-        
-    if rect_1.colliderect(obstacle_rect3):
-        color= rojo
-        puntos1= puntos1 - 1
-        #cubo=azul
-        obstacle_rect3 = pygame.Rect(random.randint(0, 900), random.randint(0, 700), 100, 100)
-        text2= font2.render("Puntucaion(1): " + str(puntos1), True,(255,0,0))
-        #text3= font3.render("Puntuacion(2): " + str(puntos2), True,(255,0,0))
-
-    if rect_2.colliderect(obstacle_rect3):
-        color= rojo
-        puntos2= puntos2 - 1
-        #cubo=azul
-        obstacle_rect3 = pygame.Rect(random.randint(0, 900), random.randint(0, 700), 100, 100)
-        #text2= font2.render("Puntucaion(1): " + str(puntos1), True,(255,0,0))
-        text3= font3.render("Puntuacion(2): " + str(puntos2), True,(255,0,0))
-
-    else:
-        color=claro
-        
-    #incorrecto colision 4
-        
-    if rect_1.colliderect(obstacle_rect4): #or rect_2.colliderect(obstacle_rect4):
-        color= rojo
-        puntos1= puntos1 - 1
-        #cubo=azul
-        obstacle_rect4 = pygame.Rect(random.randint(0, 900), random.randint(0, 700), 100, 100)
-        text2= font2.render("Puntuacion(1): " + str(puntos1), True,(255,0,0))
-        #text3= font3.render("Puntuacion(2): " + str(puntos2), True,(255,0,0))
-
-    if rect_2.colliderect(obstacle_rect4):
-        color= azul
-        puntos2= puntos2 - 1
-        #cubo=azul
-        obstacle_rect4 = pygame.Rect(random.randint(0, 900), random.randint(0, 700), 100, 100)
-        #text2= font2.render("Puntuacion(1): " + str(puntos1), True,(255,0,0))
-        text3= font3.render("Puntuacion(2): " + str(puntos2), True,(255,0,0))
-
- 
-    else:
-        color=claro
-        #cubo=generar_color_random
-    #puntos
-         
-
+    
 
     pos= pygame.mouse.get_pos()
-    rect_1.center = player_pos+pygame.math.Vector2(8, 15)
-    rect_2.center = player_pos1+pygame.math.Vector2(8, 15)
+    players[0].center = player_pos+pygame.math.Vector2(8, 15)
+    players[1].center = player_pos1+pygame.math.Vector2(8, 15)
     
-    pygame.draw.rect(ventana, color, rect_1, -1)
-    pygame.draw.rect(ventana, color, rect_2, -1)
-    pygame.draw.rect(ventana, "red", obstacle_rect)
-    pygame.draw.rect(ventana, rojo, obstacle_rect2)
-    pygame.draw.rect(ventana, rojo, obstacle_rect3)
-    pygame.draw.rect(ventana, rojo, obstacle_rect4)
-    ventana.blit(señal1, obstacle_rect)
+    pygame.draw.rect(ventana, color, players[0], -1)
+    pygame.draw.rect(ventana, color, players[1], -1)
+    
 
+
+    
+    text1= font1.render("Puntuacion(1): " + str(puntos[0]), True,(255,0,0))
+    text2= font1.render("Puntuacion(2): " + str(puntos[1]), True,(255,0,0))
+    ventana.blit(text1,(20,50))
+    ventana.blit(text2,(500,50))
+
+
+
+    #Dibujo los obstaculos
+    for x in range(0,obstacle_num):
+        pygame.draw.rect(ventana, rojo, obstacle_rects[x])
+    
+    pygame.draw.rect(ventana, "red", obstacle_rect)
+
+    ventana.blit(señal1, obstacle_rect)
     ventana.blit(jugador1, player_pos1)
     ventana.blit(jugador, player_pos)
+
+
+
+    #Movimiento de los jugadores
     keys = pygame.key.get_pressed()
     if keys[pygame.K_w]:
         player_pos.y -= 30 * dt
